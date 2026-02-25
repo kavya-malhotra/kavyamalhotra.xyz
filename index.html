@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kavya Malhotra — Product Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f1e8;
+      --bg2:       #ebe6dc;
+      --line:      rgba(0,0,0,0.08);
+      --white:     #1a1916;
+      --muted:     rgba(26,25,22,0.55);
+      --accent:    #8b6f47;
+      --accent2:   #5d7a62;
+      --red:       #a85842;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --mono:      'DM Mono', 'Courier New', monospace;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --max:       720px;
+      --gutter:    clamp(1.5rem, 5vw, 4rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      cursor: none;
+    }
+
+    /* ─── Custom cursor ─────────────────────────────────────────────── */
+    .cursor {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(139,111,71,0.4);
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.4s cubic-bezier(.22,.68,0,1.2), width 0.3s, height 0.3s, border-color 0.3s;
+    }
+    body:has(a:hover) .cursor-ring,
+    body:has(button:hover) .cursor-ring {
+      width: 60px; height: 60px;
+      border-color: var(--accent);
+    }
+
+    /* ─── Nav ───────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.6rem var(--gutter);
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled {
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-logo:hover { color: var(--white); }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ─── Layout shell ──────────────────────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ─── Divider ───────────────────────────────────────────────────── */
+    .rule {
+      width: 100%;
+      height: 1px;
+      background: var(--line);
+      margin: 5rem 0;
+    }
+
+    /* ─── Label pill ────────────────────────────────────────────────── */
+    .label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+    }
+    .label::before {
+      content: '';
+      display: inline-block;
+      width: 18px; height: 1px;
+      background: var(--accent);
+    }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding-bottom: 6rem;
+      padding-top: 8rem;
+    }
+
+    .hero-meta {
+      display: flex; align-items: center; gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: up 0.9s cubic-bezier(.22,.68,0,1) 0.2s forwards;
+    }
+    .hero-meta .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 0 var(--accent2);
+      animation: pulse 2.5s ease infinite 1.5s;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(93,122,98,0.6); }
+      70%  { box-shadow: 0 0 0 10px rgba(93,122,98,0); }
+      100% { box-shadow: 0 0 0 0 rgba(93,122,98,0); }
+    }
+    .hero-meta span {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: var(--accent2);
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: up 0.9s cubic-bezier(.22,.68,0,1) 0.35s forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      max-width: 520px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: up 0.9s cubic-bezier(.22,.68,0,1) 0.5s forwards;
+    }
+    .hero-body a {
+      color: var(--white);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--line);
+      transition: text-decoration-color 0.2s;
+    }
+    .hero-body a:hover { text-decoration-color: var(--accent); }
+
+    .hero-cta {
+      display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: center;
+      opacity: 0;
+      animation: up 0.9s cubic-bezier(.22,.68,0,1) 0.65s forwards;
+    }
+
+    @keyframes up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Buttons ───────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 1.8rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      transition: border-color 0.25s, color 0.25s, background 0.25s;
+    }
+    .btn:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+    .btn.primary {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn.primary:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn .arrow { transition: transform 0.25s; }
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    /* ─── Sections ──────────────────────────────────────────────────── */
+    section { padding: 7rem 0; }
+
+    /* ─── Bio section ───────────────────────────────────────────────── */
+    #bio .bio-text {
+      font-size: 1.15rem;
+      line-height: 1.85;
+      font-weight: 300;
+    }
+    #bio .bio-text p + p { margin-top: 1.4rem; }
+    #bio .bio-text a {
+      color: var(--white);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(0,0,0,0.2);
+      transition: text-decoration-color 0.2s;
+    }
+    #bio .bio-text a:hover { text-decoration-color: var(--accent); }
+
+    .bio-sidebar {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+    }
+    .bio-stat {
+      padding: 1.8rem 2rem;
+      border-right: 1px solid var(--line);
+    }
+    .bio-stat:last-child { border-right: none; }
+    .bio-stat .num {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      color: var(--white);
+    }
+    .bio-stat .desc {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Resume / Timeline ─────────────────────────────────────────── */
+    #resume .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s;
+    }
+    .timeline-item:first-child { border-top: 1px solid var(--line); }
+
+    .tl-date {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding-top: 0.25rem;
+    }
+    .tl-role { font-weight: 500; color: var(--white); margin-bottom: 0.25rem; }
+    .tl-company {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .tl-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.7; font-weight: 300; }
+    .tl-desc em { font-style: italic; color: var(--accent2); font-size: 0.9rem; }
+
+    /* ─── Learning / Courses ────────────────────────────────────────── */
+    #learning .learning-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    #learning .learning-intro p {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .courses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .course-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--line);
+      transition: padding-left 0.2s;
+    }
+    .course-item:first-child { border-top: 1px solid var(--line); }
+    .course-item:hover {
+      padding-left: 10px;
+    }
+    .course-provider {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .course-name {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .course-meta {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ─── Skills ────────────────────────────────────────────────────── */
+    #skills .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+    }
+    .skill-col {
+      padding: 2rem 2rem 2.5rem;
+      border-right: 1px solid var(--line);
+    }
+    .skill-col:last-child { border-right: none; }
+    .skill-col h3 {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+    }
+    .skill-col ul { list-style: none; }
+    .skill-col ul li {
+      font-size: 0.95rem;
+      color: var(--muted);
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--line);
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .skill-col ul li:last-child { border-bottom: none; }
+    .skill-col ul li:hover { color: var(--white); padding-left: 6px; }
+
+    /* ─── Work / Projects ───────────────────────────────────────────── */
+    #work .project + .project { margin-top: 5rem; }
+
+    .project {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .project.visible { opacity: 1; transform: none; }
+
+    .project-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+    .project-type {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid rgba(93,122,98,0.3);
+      padding: 0.2rem 0.7rem;
+    }
+
+    .project h3 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      transition: color 0.2s;
+    }
+    .project:hover h3 { color: var(--accent); }
+
+    .project-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 640px;
+      margin-bottom: 1.6rem;
+    }
+
+    .project-metrics {
+      display: flex; flex-wrap: wrap; gap: 0.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .metric {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.9rem;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .metric.highlight {
+      border-color: rgba(139,111,71,0.35);
+      color: var(--accent);
+    }
+
+    .project-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .project-link:hover { color: var(--white); border-color: var(--white); }
+    .project-link .arr { transition: transform 0.2s; }
+    .project-link:hover .arr { transform: translateX(4px); }
+
+    /* ─── Marquee ───────────────────────────────────────────────────── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 1.2rem 0;
+      margin: 0;
+    }
+    .marquee-track {
+      display: flex; gap: 3rem;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      display: flex; align-items: center; gap: 3rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .marquee-item .sep {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ─── Contact ───────────────────────────────────────────────────── */
+    #contact {
+      padding-top: 6rem;
+      padding-bottom: 8rem;
+    }
+    #contact .contact-headline {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    #contact .contact-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    #contact p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 480px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+    .contact-links {
+      display: flex; flex-wrap: wrap; gap: 1.2rem;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem var(--gutter);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer span, footer a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--white); }
+
+    /* ─── Scroll reveal ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── Mobile ────────────────────────────────────────────────────── */
+    @media (max-width: 680px) {
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+
+      .nav-links { gap: 1.4rem; }
+      .nav-links li:nth-child(3) { display: none; }
+
+      .timeline-item { grid-template-columns: 1fr; gap: 0.4rem; }
+      .tl-date { padding-top: 0; }
+
+      .bio-stat { border-right: none; border-bottom: 1px solid var(--line); }
+      .bio-stat:last-child { border-bottom: none; }
+
+      .skill-col { border-right: none; border-bottom: 1px solid var(--line); }
+      .skill-col:last-child { border-bottom: none; }
+
+      #learning .learning-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor" id="cur"></div>
+  <div class="cursor-ring" id="curRing"></div>
+
+  <!-- ─── Nav ──────────────────────────────────────────── -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">KM</a>
+    <ul class="nav-links">
+      <li><a href="#bio">Bio</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#learning">Learning</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero ─────────────────────────────────────────── -->
+  <div class="container">
+    <section id="hero">
+      <div class="hero-meta">
+        <span class="dot"></span>
+        <span>Product Manager · Abu Dhabi</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Kavya Malhotra—<br />
+        Product Manager,<br />
+        <em>data-driven builder.</em>
+      </h1>
+
+      <p class="hero-body">
+        I turn complex analytical challenges into scalable products that drive decisions.
+        Currently PM1 at <a href="https://www.expediagroup.com" target="_blank">Expedia Group</a>,
+        leading a global internal analytics platform supporting 500+ metrics. Previously at United Airlines,
+        where I built PowerBI dashboards tracking 3M+ daily users across digital platforms.
+      </p>
+
+      <!-- EDIT: Replace YOUR-LINKEDIN-USERNAME with your actual LinkedIn username -->
+      <div class="hero-cta">
+        <a href="#work" class="btn primary">See my work <span class="arrow">→</span></a>
+        <a href="resume.pdf" class="btn" download>Download CV <span class="arrow">→</span></a>
+        <a href="#contact" class="btn">Get in touch <span class="arrow">→</span></a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─── Marquee ───────────────────────────────────────── -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item">
+        Product Strategy <span class="sep"></span>
+        Agile Delivery <span class="sep"></span>
+        Product Roadmapping <span class="sep"></span>
+        SQL &amp; Tableau <span class="sep"></span>
+        Power BI <span class="sep"></span>
+        JIRA &amp; Confluence <span class="sep"></span>
+        Quantum Metrics <span class="sep"></span>
+        Figma Prototyping <span class="sep"></span>
+        Stakeholder Management <span class="sep"></span>
+        Process Automation <span class="sep"></span>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item">
+        Product Strategy <span class="sep"></span>
+        Agile Delivery <span class="sep"></span>
+        Product Roadmapping <span class="sep"></span>
+        SQL &amp; Tableau <span class="sep"></span>
+        Power BI <span class="sep"></span>
+        JIRA &amp; Confluence <span class="sep"></span>
+        Quantum Metrics <span class="sep"></span>
+        Figma Prototyping <span class="sep"></span>
+        Stakeholder Management <span class="sep"></span>
+        Process Automation <span class="sep"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Bio ──────────────────────────────────────────── -->
+  <div class="container">
+    <section id="bio">
+      <div class="label">Who I am</div>
+
+      <div class="bio-text reveal">
+        <p>
+          I'm a Product Manager specialising in analytics platforms that transform data into 
+          actionable insights. With a Computer Science background from Punjab Engineering College,
+          I've spent my career at the intersection of product strategy, data analytics, and 
+          cross-functional leadership.
+        </p>
+        <p>
+          At Expedia Group, I own the roadmap for a global internal analytics platform used by 
+          500+ metrics across business, product, and engineering teams. Before that, at United Airlines,
+          I built PowerBI dashboards tracking 3M+ daily users and delivered insights that shaped 
+          feature rollouts across 5 cross-functional technology teams.
+        </p>
+        <p>
+          I've worked across the UAE, India, and with global teams in London and Seattle. 
+          I care deeply about building products that solve real problems—and shipping things 
+          that people actually want to use.
+        </p>
+      </div>
+
+      <div class="bio-sidebar reveal">
+        <div class="bio-stat">
+          <div class="num">500+</div>
+          <div class="desc">Metrics Supported</div>
+        </div>
+        <div class="bio-stat">
+          <div class="num">3M+</div>
+          <div class="desc">Daily Users Tracked</div>
+        </div>
+        <div class="bio-stat">
+          <div class="num">50%</div>
+          <div class="desc">Efficiency Gains</div>
+        </div>
+        <div class="bio-stat">
+          <div class="num">6</div>
+          <div class="desc">Awards & Recognition</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- ─── Resume ────────────────────────────────────────── -->
+    <section id="resume">
+      <div class="label">Experience</div>
+
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <div class="tl-date">Aug 2024 – Present</div>
+          <div>
+            <div class="tl-role">Product Manager I</div>
+            <div class="tl-company">Expedia Group · Remote/Hybrid</div>
+            <div class="tl-desc">
+              Own roadmap and backlog for a global internal analytics platform supporting 500+ metrics.
+              Lead cross-functional team of 10, driving sprint planning and delivery. Delivered 9+ UX 
+              enhancements improving adoption. Automated Slack workflows reducing turnaround by 50%. 
+              Partner with stakeholders across London, Seattle, and Delhi.
+              <br><em>Awards: Q1, Q2, Q3 2025 Recognition for high-impact delivery</em>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-date">July 2023 – Aug 2024</div>
+          <div>
+            <div class="tl-role">Associate Analyst (Product Analytics)</div>
+            <div class="tl-company">United Airlines · Gurgaon, India</div>
+            <div class="tl-desc">
+              Analysed global usage patterns for digital platforms. Created PowerBI dashboards tracking 
+              3M+ daily users across CIAM, Loyalty, and Ancillary features. Delivered insights supporting 
+              feature rollouts across 5 cross-functional technology teams.
+              <br><em>Awarded Platinum Award for exceptional performance (FY 2023)</em>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-date">Mar 2022 – June 2022</div>
+          <div>
+            <div class="tl-role">Data Analyst Intern</div>
+            <div class="tl-company">Pearl Data Direct (Lulu Financial Holdings) · Abu Dhabi, U.A.E</div>
+            <div class="tl-desc">
+              Identified KPIs and developed operational performance reports (MIS) on 75+ branches. 
+              Built Tableau visualizations presenting Q2D/M2D customer data. Developed dashboard 
+              to flag email system errors, streamlining workflows for 100+ employees.
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-date">2019 – 2023</div>
+          <div>
+            <div class="tl-role">B.Tech, Computer Science Engineering</div>
+            <div class="tl-company">Punjab Engineering College, Chandigarh</div>
+            <div class="tl-desc">
+              Courses: Big Data Analytics, Agile Methodology, Machine Learning, Database Management.
+              <br><strong>Leadership:</strong> Student Head - New Initiatives, Career Development & Guidance Centre (2022-2023). 
+              Led team of 4, built corporate partnerships, ran 5+ hiring drives.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- ─── Recent Learning ───────────────────────────────── -->
+    <section id="learning">
+      <div class="label">Continuous Learning</div>
+
+      <div class="learning-grid reveal">
+        <div class="learning-intro">
+          <p>
+            Product management evolves fast, and so do I. Here are some of the courses and 
+            certifications I've completed recently to stay sharp on product strategy, analytics, 
+            and emerging tools.
+          </p>
+        </div>
+
+        <div class="courses-list">
+          <div class="course-item">
+            <div class="course-provider">Coursera</div>
+            <div class="course-name">Advanced Product Management</div>
+            <div class="course-meta">Product Strategy · Roadmapping · Stakeholder Management</div>
+          </div>
+
+          <div class="course-item">
+            <div class="course-provider">LinkedIn Learning</div>
+            <div class="course-name">Data Analytics for Product Managers</div>
+            <div class="course-meta">SQL · Python · Data-Driven Decision Making</div>
+          </div>
+
+          <div class="course-item">
+            <div class="course-provider">Udemy</div>
+            <div class="course-name">Power BI for Business Intelligence</div>
+            <div class="course-meta">DAX · Data Modeling · Dashboard Design</div>
+          </div>
+
+          <div class="course-item">
+            <div class="course-provider">Reforge</div>
+            <div class="course-name">Product Strategy</div>
+            <div class="course-meta">Go-to-Market · Growth Frameworks · Product-Market Fit</div>
+          </div>
+
+          <div class="course-item">
+            <div class="course-provider">Udacity</div>
+            <div class="course-name">UX Research & Design</div>
+            <div class="course-meta">User Research · Prototyping · Usability Testing</div>
+          </div>
+
+          <div class="course-item">
+            <div class="course-provider">Self-Directed</div>
+            <div class="course-name">Agile & Scrum Practices</div>
+            <div class="course-meta">Sprint Planning · Backlog Management · Team Facilitation</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- ─── Skills ────────────────────────────────────────── -->
+    <section id="skills">
+      <div class="label">Craft</div>
+
+      <div class="skills-grid reveal">
+        <div class="skill-col">
+          <h3>Product</h3>
+          <ul>
+            <li>Product Strategy</li>
+            <li>Product Roadmapping</li>
+            <li>Agile Delivery</li>
+            <li>Stakeholder Management</li>
+            <li>User Research</li>
+            <li>Product Marketing</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h3>Data & Analytics</h3>
+          <ul>
+            <li>SQL</li>
+            <li>Tableau</li>
+            <li>Power BI</li>
+            <li>MS Excel</li>
+            <li>Data Analysis</li>
+            <li>Quantum Metrics (CX)</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h3>Tools & Platforms</h3>
+          <ul>
+            <li>JIRA & Confluence</li>
+            <li>Miro</li>
+            <li>Figma (Prototyping)</li>
+            <li>Canva</li>
+            <li>Slack Automation</li>
+            <li>MS Office Suite</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h3>Core Competencies</h3>
+          <ul>
+            <li>Process Improvement</li>
+            <li>Automation</li>
+            <li>UX Enhancement</li>
+            <li>Cross-functional Leadership</li>
+            <li>Sprint Planning</li>
+            <li>Technical Writing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- ─── Work ──────────────────────────────────────────── -->
+    <section id="work">
+      <div class="label">Selected work</div>
+
+      <!-- Project 1 -->
+      <div class="project">
+        <div class="project-header">
+          <span class="project-num">01 / 04</span>
+          <span class="project-type">Case Study · Market Strategy</span>
+        </div>
+        <h3>Airbnb MENA — Mobile Strategy</h3>
+        <p class="project-desc">
+          A deep-dive market analysis and strategic recommendation for Airbnb's mobile
+          expansion in the Middle East and North Africa region. Examined user behaviour,
+          competitive landscape, and localisation opportunities to identify growth levers
+          for an underserved but high-potential market.
+        </p>
+        <div class="project-metrics">
+          <span class="metric">Market Analysis</span>
+          <span class="metric">Mobile UX</span>
+          <span class="metric">Competitive Benchmarking</span>
+          <span class="metric highlight">Regional Strategy</span>
+        </div>
+        <a href="https://github.com/kavya-malhotra/Data-Viz-Projects/blob/21c11ee90cc1b501d011307fb18e6ee72382918a/Airbnb-MENA-Mobile-Strategy.pdf" target="_blank" class="project-link">
+          Read case study <span class="arr">→</span>
+        </a>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project">
+        <div class="project-header">
+          <span class="project-num">02 / 04</span>
+          <span class="project-type">Product Design · Healthcare</span>
+        </div>
+        <h3>Medicom — App Prototype</h3>
+        <p class="project-desc">
+          Designed for the Microsoft Design Challenge 2022. Medicom addresses healthcare
+          accessibility by reimagining how patients and providers interact through mobile.
+          The prototype focused on reducing friction in appointment booking, medication
+          tracking, and care communication for underserved users.
+        </p>
+        <div class="project-metrics">
+          <span class="metric">UX Design</span>
+          <span class="metric">Prototyping</span>
+          <span class="metric">Accessibility</span>
+          <span class="metric highlight">Microsoft Design Challenge</span>
+        </div>
+        <a href="https://www.behance.net/gallery/137862977/Microsoft-Design-Challenge-2022-Medicom" target="_blank" class="project-link">
+          View on Behance <span class="arr">→</span>
+        </a>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project">
+        <div class="project-header">
+          <span class="project-num">03 / 04</span>
+          <span class="project-type">Research · ML / Accessibility</span>
+        </div>
+        <h3>Indian Sign Language — Dataset &amp; Recognition</h3>
+        <p class="project-desc">
+          Final year research project building a comprehensive ISL dataset and training a
+          machine learning model for real-time sign language recognition. The work bridges
+          a genuine communication gap — most sign language systems focus on ASL, leaving
+          ISL significantly underserved in the tech landscape.
+        </p>
+        <div class="project-metrics">
+          <span class="metric">Python</span>
+          <span class="metric">Machine Learning</span>
+          <span class="metric">Dataset Curation</span>
+          <span class="metric highlight">Real-world Impact</span>
+        </div>
+        <a href="https://github.com/kmalhotr/ISL-Dataset/blob/main/Major_Project_report.pdf" target="_blank" class="project-link">
+          Read research report <span class="arr">→</span>
+        </a>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="project">
+        <div class="project-header">
+          <span class="project-num">04 / 04</span>
+          <span class="project-type">Data Visualisation · Analytics</span>
+        </div>
+        <h3>Mock Airline — Data Visualisation</h3>
+        <p class="project-desc">
+          An end-to-end data visualisation project analysing mock airline operational data.
+          Demonstrates the full analytical workflow: data cleaning, exploratory analysis,
+          and narrative-driven dashboards that turn raw numbers into decisions. Built to
+          communicate clearly with both technical and non-technical stakeholders.
+        </p>
+        <div class="project-metrics">
+          <span class="metric">Tableau</span>
+          <span class="metric">Data Storytelling</span>
+          <span class="metric">Business Intelligence</span>
+          <span class="metric highlight">Stakeholder Comms</span>
+        </div>
+        <a href="https://github.com/kmalhotr/Data-Viz-Projects/blob/main/Visualising%20Mock%20Airlines%20Data%20-%20Kavya.pdf" target="_blank" class="project-link">
+          View project <span class="arr">→</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- ─── Contact ───────────────────────────────────────── -->
+    <section id="contact">
+      <div class="label">Say hello</div>
+      <h2 class="contact-headline reveal">
+        Let's build something<br /><em>impactful together.</em>
+      </h2>
+      <p class="reveal">
+        I'm always open to discussing product opportunities, collaborations, or simply connecting 
+        with fellow PMs and builders. Whether it's analytics, travel tech, or consumer products—
+        let's talk.
+      </p>
+      <!-- EDIT: Replace YOUR-LINKEDIN-USERNAME with your actual LinkedIn username -->
+      <div class="contact-links reveal">
+        <a href="mailto:kavyamalhotra129@gmail.com" class="btn primary">
+          Email me <span class="arrow">→</span>
+        </a>
+        <a href="https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/" target="_blank" class="btn">
+          LinkedIn <span class="arrow">→</span>
+        </a>
+        <a href="resume.pdf" class="btn" download>
+          Download CV <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─── Footer ────────────────────────────────────────── -->
+  <footer>
+    <span>© 2025 Kavya Malhotra</span>
+    <!-- EDIT: Replace YOUR-LINKEDIN-USERNAME with your actual LinkedIn username -->
+    <div style="display:flex;gap:2rem;">
+      <a href="mailto:kavyamalhotra129@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/" target="_blank">LinkedIn</a>
+      <a href="resume.pdf" download>Resume</a>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Custom cursor
+    const cur     = document.getElementById('cur');
+    const curRing = document.getElementById('curRing');
+    let mx = -100, my = -100, rx = -100, ry = -100;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    function animCursor() {
+      cur.style.left = mx + 'px';
+      cur.style.top  = my + 'px';
+
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      curRing.style.left = rx + 'px';
+      curRing.style.top  = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+
+    // Nav scroll class
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal, .project');
+    const observer  = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { 
+          e.target.classList.add('visible'); 
+          observer.unobserve(e.target); 
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
